@@ -23,6 +23,20 @@ export class UsuarioService {
     return usuario;
   }
 
+  async findOne(id: string) {
+    const usuario = await this.prisma.usuarios.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!usuario) {
+      throw new Error('Usuário não encontrado.');
+    }
+
+    return usuario;
+  }
+
   async findAll() {
     return this.prisma.usuarios.findMany();
   }

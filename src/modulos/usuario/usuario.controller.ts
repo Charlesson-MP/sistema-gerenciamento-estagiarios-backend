@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { UsuarioDTO } from './usuario.dto';
 
@@ -9,6 +9,11 @@ export class UsuarioController {
   @Post()
   async create(@Body() data: UsuarioDTO) {
     this.usuarioService.create(data);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.usuarioService.findOne(id);
   }
 
   @Get()
