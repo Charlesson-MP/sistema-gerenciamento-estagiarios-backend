@@ -40,4 +40,41 @@ export class UsuarioService {
   async findAll() {
     return this.prisma.usuarios.findMany();
   }
+
+  async update(id: string, data: UsuarioDTO) {
+    const usuarioExiste = await this.prisma.usuarios.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!usuarioExiste) {
+      throw new Error('Usuário não existe.');
+    }
+
+    return await this.prisma.usuarios.update({
+      data,
+      where: {
+        id,
+      },
+    });
+  }
+
+  async delete(id: string) {
+    const usuarioExiste = await this.prisma.usuarios.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!usuarioExiste) {
+      throw new Error('Usuário não existe.');
+    }
+
+    return await this.prisma.usuarios.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
