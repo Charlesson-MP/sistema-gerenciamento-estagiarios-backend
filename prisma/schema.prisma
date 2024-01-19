@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model contratos {
+  id                 String               @id @db.VarChar
+  id_usuario         String               @db.VarChar
+  modalidade         String               @db.Char(20)
+  data_inicio        DateTime             @db.Date
+  data_fim           DateTime             @db.Date
+  data_recisao       DateTime?            @db.Date
+  usuarios           usuarios             @relation(fields: [id_usuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "id_usuario")
+  solicitacao_ferias solicitacao_ferias[]
+}
+
+model solicitacao_ferias {
+  id          String    @id @db.VarChar
+  id_contrato String    @db.VarChar
+  data_inicio DateTime  @db.Date
+  data_fim    DateTime  @db.Date
+  status      String    @db.Char(20)
+  contratos   contratos @relation(fields: [id_contrato], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "id_contrato")
+}
+
+model usuarios {
+  id        String      @id(map: "id_usuario") @db.VarChar(1)
+  nome      String      @db.Char(60)
+  email     String      @db.Char(60)
+  telefone  String      @db.Char(11)
+  perfil    String      @db.Char(20)
+  status    String      @db.Char(20)
+  senha     String      @db.Char(200)
+  contratos contratos[]
+}
