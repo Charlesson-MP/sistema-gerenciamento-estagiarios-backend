@@ -22,9 +22,6 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
 
@@ -45,6 +42,90 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Description
+
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
+### 1 - Criação do banco de dados
+
+  Antes de iniciar a codificação do backend do projeto, criei a estrutura do banco de dados com as seguintes tabelas:
+  ```bash
+  CREATE TABLE IF NOT EXISTS public.usuarios
+(
+    id character varying(1) COLLATE pg_catalog."default" NOT NULL,
+    nome character(60) COLLATE pg_catalog."default" NOT NULL,
+    email character(60) COLLATE pg_catalog."default" NOT NULL,
+    telefone character(11) COLLATE pg_catalog."default" NOT NULL,
+    perfil character(20) COLLATE pg_catalog."default" NOT NULL,
+    status character(20) COLLATE pg_catalog."default" NOT NULL,
+    senha character(200) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT id_usuario PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.usuarios
+    OWNER to postgres;
+
+  CREATE TABLE IF NOT EXISTS public.contratos
+(
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    id_usuario character varying COLLATE pg_catalog."default" NOT NULL,
+    modalidade character(20) COLLATE pg_catalog."default" NOT NULL,
+    data_inicio date NOT NULL,
+    data_fim date NOT NULL,
+    data_recisao date,
+    CONSTRAINT contratos_pkey PRIMARY KEY (id),
+    CONSTRAINT id_usuario FOREIGN KEY (id_usuario)
+        REFERENCES public.usuarios (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+CREATE TABLE IF NOT EXISTS public.solicitacao_ferias
+(
+    id character varying COLLATE pg_catalog."default" NOT NULL,
+    id_contrato character varying COLLATE pg_catalog."default" NOT NULL,
+    data_inicio date NOT NULL,
+    data_fim date NOT NULL,
+    status character(20) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT solicitacao_ferias_pkey PRIMARY KEY (id),
+    CONSTRAINT id_contrato FOREIGN KEY (id_contrato)
+        REFERENCES public.contratos (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.solicitacao_ferias
+    OWNER to postgres;
+
+  ```
+
+### 2 - Configuração do prisma
+
+Nesta fase do projeto instalei o prisma, o inicializei com os comandos:
+```bash
+npm install -D prisma
+npx prisma init (Necessário instalar o prisma client através do comando "npm install @prisma/client")
+```
+
+Após isso é necessário ajustar o link do banco no arquivo .env na variável DATABASE_UR.
+Com isso já deve ser possível importar o banco de dados através do comando:
+```bash
+prisma db pull
+```
+
+Para verificar as tabelas através do prisma utilize:
+```bash
+npx prisma studio
+```
+
+Após a instalação e configuração dos componentes acima listado, comecei a implementação dos módulos, inicialmente pelo módulo prisma, para controlar o acesso aos dados, e após isso comecei a implementação dos modelos que usarão a aplicação, ou seja, usuário, estagiário e solicitação férias.
+
+Até então apenas o módulo de de usuários está funcionando normalmente. Ou seja, todas as rotas implementadas funcionaram de acordo o esperado.
+Porém, já na criação do módulo de contratos surgiu um desafio que ainda não consegui resolver. 
 ## Test
 
 ```bash
