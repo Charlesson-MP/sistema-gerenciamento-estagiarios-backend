@@ -125,7 +125,9 @@ npx prisma studio
 Após a instalação e configuração dos componentes acima listado, comecei a implementação dos módulos, inicialmente pelo módulo prisma, para controlar o acesso aos dados, e após isso comecei a implementação dos modelos que usarão a aplicação, ou seja, usuário, estagiário e solicitação férias.
 
 Até então apenas o módulo de de usuários está funcionando normalmente. Ou seja, todas as rotas implementadas funcionaram de acordo o esperado.
-Porém, já na criação do módulo de contratos surgiu um desafio que ainda não consegui resolver. 
+Porém, já na criação do módulo de contratos surgiu um desafio que ainda não consegui resolver.
+Aparentemente, o problema é causado pela diferença na definição de contrato feita no arquivo contrato.dto.ts e a definição disponibilizada pelo prisma, contudo eu peguei esta definição no próprio pisma, no arquivo index.d.ts no tipo exportado contratosCreateInput. Desde então, deixei o backende um pouco de lado para focar no frontend do projeto.
+
 ## Test
 
 ```bash
